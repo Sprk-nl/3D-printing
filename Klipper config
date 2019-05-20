@@ -12,9 +12,20 @@
 # - Combing Mode: Off
 # - Z Hop When Retracted: Off
 
-# Pid Tuning extruder and bed
-# Tune Linear advance
-# Tune Pressure Advance
+# Tuning:
+# - Bed Leveling
+# - BlTouch
+# - Pid  extruder and bed
+# - E steps
+# - Tune Pressure Advance
+
+
+# TMC2130 datasheet  : https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC2130_datasheet.pdf
+# Tuning TMC driver  : https://www.trinamic.com/fileadmin/assets/Support/Appnotes/AN001-spreadCycle.pdf
+# Gcode comparison   : https://github.com/KevinOConnor/klipper/blob/master/docs/G-Codes.md
+# Tuning Pressure Adv: https://github.com/KevinOConnor/klipper/blob/master/docs/Pressure_Advance.md
+# Klipper Kinematics : https://github.com/KevinOConnor/klipper/blob/master/docs/Kinematics.md
+
 
 
 # ADC Pins: PK7, PK6, PK5, PK4, PK3, PK2, PK1, PK0
@@ -49,11 +60,6 @@
 # Ex 2 Heater: PH4, Temp: PK6
 # Bed  Heater: PH5, Temp: PK7
 
-# TMC2130 datasheet  : https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC2130_datasheet.pdf
-# Tuning TMC         : https://www.trinamic.com/fileadmin/assets/Support/Appnotes/AN001-spreadCycle.pdf
-# Gcode comparison   : https://github.com/KevinOConnor/klipper/blob/master/docs/G-Codes.md
-# Tuning Pressure Adv: https://github.com/KevinOConnor/klipper/blob/master/docs/Pressure_Advance.md
-# Klipper Kinematics : https://github.com/KevinOConnor/klipper/blob/master/docs/Kinematics.md
 
 
 [stepper_x]
@@ -71,7 +77,7 @@ homing_speed: 40
 cs_pin: PG4
 microsteps: 16
 interpolate: True
-run_current: .400
+run_current: .500
 hold_current: .200
 sense_resistor: 0.110
 stealthchop_threshold: 300
@@ -101,7 +107,7 @@ homing_speed: 35
 cs_pin: PG2
 microsteps: 16
 interpolate: True
-run_current: .400
+run_current: .500
 hold_current: .200
 sense_resistor: 0.110
 stealthchop_threshold: 300
@@ -135,8 +141,7 @@ interpolate: True
 run_current: .400
 hold_current: .200
 sense_resistor: 0.110
-# stealthchop_threshold: 0 is disabled
-stealthchop_threshold: 0
+stealthchop_threshold: 0 ; disabled
 driver_IHOLDDELAY: 8
 driver_TPOWERDOWN: 0
 driver_TOFF: 3
@@ -153,7 +158,8 @@ driver_SGT: 4
 step_pin: PA4
 dir_pin: PA6
 enable_pin: !PA2
-step_distance: .0415
+#step_distance: .00241 ; Marlin conversion: 1 / 415 = 0.0024096386
+step_distance: 0.002100 ; custom from discord
 nozzle_diameter: 0.4
 filament_diameter: 1.750
 max_extrude_cross_section: 2.5
@@ -164,8 +170,7 @@ min_extrude_temp: 170
 heater_pin: PE3
 sensor_type: EPCOS 100K B57560G104F
 sensor_pin: PK4
-control: pid
-# tuned for stock hardware with 210 degree Celsius target fan enabled
+control: pid ; tuned for stock hardware with 210 degree Celsius target fan enabled
 pid_Kp: 21.762
 pid_Ki: 1.091
 pid_Kd: 108.537
@@ -183,8 +188,8 @@ interpolate: True
 run_current: .300
 hold_current: .150
 sense_resistor: 0.110
-stealthchop_threshold: 0
-diag1_pin: ^!PH6
+stealthchop_threshold: 0 ; disabled
+#diag1_pin: ^!PH6
 driver_IHOLDDELAY: 8
 driver_TPOWERDOWN: 4
 driver_TOFF: 4
@@ -200,8 +205,7 @@ driver_SGT: 3
 heater_pin: PH5
 sensor_type: EPCOS 100K B57560G104F
 sensor_pin: PK7
-control: pid
-# tuned for 60 degree Celsius target
+control: pid ; tuned for 60 degree Celsius target
 pid_Kp: 66.577
 pid_Ki: 0.915
 pid_Kd: 1210.866
@@ -269,6 +273,7 @@ probe_count: 5,5
 path: ~/gcode
 
 [mcu]
+baud: 250000
 serial: /dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0
 
 # "RepRapDiscount 128x64 Full Graphic Smart Controller" type displays
