@@ -1,3 +1,61 @@
+# Klipper Configuration 
+# Board: FYSETC F6 V1.3
+# Drivers: TMC2130
+# extruder: Bondtech
+# Frame: Creality Ender 3
+#
+# Disable the following settings in your slicer:
+# coast, wipe
+# Cura:
+# - Enable Acceleration control: off
+# - Enable Jerk Control: Off
+# - Combing Mode: Off
+# - Z Hop When Retracted: Off
+
+# Pid Tuning extruder and bed
+# Tune Linear advance
+# Tune Pressure Advance
+
+
+# ADC Pins: PK7, PK6, PK5, PK4, PK3, PK2, PK1, PK0
+# ADC Pins: PF7, PF6, PF5, PF4, PF3, PF2, PF1, PF0
+
+# FYSETC F6 v1.3 Pin Map
+# --------------------------------------------------------
+# X  step: PF0, dir: PF1, enable: PD7, cs: PG4, diag: PK1
+# Y  step: PF6, dir: PF7, enable: PF2, cs: PG2, diag: PJ1
+# Z  step: PL6, dir: PL1, enable: PF4, cs: PJ7, diag: PB6
+# E0 step: PA4, dir: PA6, enable: PA2, cs: PL2, diag: PH6
+# E1 step: PC1, dir: PC3, enable: PC7, cs: PC5, diag: PJ0
+# E2 step: PF5, dir: PF3, enable: PG1, cs: PL7, diag: PK2
+
+# For 2130 SPI to work you MUST disable any unused CS pins
+
+# Fan0 pin: PL5, hardware_pwm: True
+# Fan1 pin: PL4, hardware_pwm: True
+# Fan2 pin: PL3, hardware_pwm: True
+
+# SPI: sck: PB1, miso: PB3, mosi: PB2, ss: PB0
+
+# UART1: PD2, PD3
+
+# Aux-1: PK0, PK3
+# Aux-1: PE0, PE1
+
+# Servo: PB7, PB5, PB4, PG5, hardware_pwm: True
+
+# Ex 0 Heater: PE3, Temp: PK4
+# Ex 1 Heater: PH3, Temp: PK5
+# Ex 2 Heater: PH4, Temp: PK6
+# Bed  Heater: PH5, Temp: PK7
+
+# TMC2130 datasheet  : https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC2130_datasheet.pdf
+# Tuning TMC         : https://www.trinamic.com/fileadmin/assets/Support/Appnotes/AN001-spreadCycle.pdf
+# Gcode comparison   : https://github.com/KevinOConnor/klipper/blob/master/docs/G-Codes.md
+# Tuning Pressure Adv: https://github.com/KevinOConnor/klipper/blob/master/docs/Pressure_Advance.md
+# Klipper Kinematics : https://github.com/KevinOConnor/klipper/blob/master/docs/Kinematics.md
+
+
 [stepper_x]
 step_pin: PF0
 dir_pin: PF1
@@ -16,7 +74,7 @@ interpolate: True
 run_current: .400
 hold_current: .200
 sense_resistor: 0.110
-stealthchop_threshold: 100
+stealthchop_threshold: 300
 driver_IHOLDDELAY: 8
 driver_TPOWERDOWN: 0
 driver_TOFF: 3
@@ -46,7 +104,7 @@ interpolate: True
 run_current: .400
 hold_current: .200
 sense_resistor: 0.110
-stealthchop_threshold: 100
+stealthchop_threshold: 300
 driver_IHOLDDELAY: 8
 driver_TPOWERDOWN: 0
 driver_TOFF: 3
@@ -63,7 +121,7 @@ step_pin: PL6
 dir_pin: PL1
 enable_pin: !PF4
 step_distance: .0025
-endstop_pin: ^!PB6
+endstop_pin: probe:z_virtual_endstop
 #position_endstop is the z-offset between the nozzle and bed after bltouch homing
 position_endstop: 0.45
 position_max: 180
@@ -77,10 +135,12 @@ interpolate: True
 run_current: .400
 hold_current: .200
 sense_resistor: 0.110
-stealthchop_threshold: 3
+# stealthchop_threshold: 0 is disabled
+stealthchop_threshold: 0
 driver_IHOLDDELAY: 8
 driver_TPOWERDOWN: 0
 driver_TOFF: 3
+#Hysteresis
 driver_HEND: 1
 driver_HSTRT: 5
 driver_PWM_FREQ: 2
@@ -89,50 +149,32 @@ driver_PWM_AMPL: 200
 driver_PWM_AUTOSCALE: True
 driver_SGT: 4
 
-
-[probe]
-pin: PK6
-#thermistor: PK5
-x_offset: 38
-y_offset: 8
-z_offset: 0.45
-speed: 5.0
-
-[bed_mesh]
-speed: 50
-horizontal_move_z: 5
-samples: 3
-samples_result: average
-sample_retract_dist: 2.0
-min_point: 40,40
-max_point: 195,195
-probe_count: 3,3
-
-
-
 [extruder]
 step_pin: PA4
 dir_pin: PA6
 enable_pin: !PA2
-step_distance: 0.0415
+step_distance: .0415
 nozzle_diameter: 0.4
 filament_diameter: 1.750
 max_extrude_cross_section: 2.5
 max_extrude_only_distance: 1500.0
 max_extrude_only_velocity: 300.0
 max_extrude_only_accel: 1250.0
-heater_pin: PH4
+min_extrude_temp: 170
+heater_pin: PE3
 sensor_type: EPCOS 100K B57560G104F
 sensor_pin: PK4
 control: pid
-# tuned for stock hardware with 200 degree Celsius target
-pid_Kp: 21.527
-pid_Ki: 1.063
-pid_Kd: 108.982
+# tuned for stock hardware with 210 degree Celsius target fan enabled
+pid_Kp: 21.762
+pid_Ki: 1.091
+pid_Kd: 108.537
 min_temp: 0
 max_temp: 250
 pressure_advance: 0.05
 pressure_advance_lookahead_time: 0.010
+
+
 
 [tmc2130 extruder]
 cs_pin: PL2
@@ -159,18 +201,21 @@ heater_pin: PH5
 sensor_type: EPCOS 100K B57560G104F
 sensor_pin: PK7
 control: pid
-# tuned for stock hardware with 50 degree Celsius target
-pid_Kp: 54.027
-pid_Ki: 0.770
-pid_Kd: 948.182
+# tuned for 60 degree Celsius target
+pid_Kp: 66.577
+pid_Ki: 0.915
+pid_Kd: 1210.866
 min_temp: 0
-max_temp: 110
+max_temp: 80
 
-[fan]
+
+#fan for printed model FAN0
+[fan] 
 pin: PL5
 hardware_pwm: True
 #cycle_time: 0.2
 
+#fan for hotend FAN1
 [heater_fan nozzle_cooling_fan]
 pin: PL4
 heater: extruder
@@ -182,6 +227,41 @@ hardware_pwm: True
 [controller_fan mcu_enclosure]
 pin: PL3
 shutdown_speed: 0
+
+[bltouch]
+sensor_pin: PB6
+control_pin: PB7
+x_offset: -38
+y_offset: -8
+z_offset: 0.45
+pin_up_reports_not_triggered: False
+pin_up_touch_mode_reports_triggered: False
+
+
+[homing_override]
+# Default the G28 will measure with nozzle off the bed at X,Y 0,0
+# Keep in mind the bltouch xyz_offset is used for calculation, not for physical bed positioning
+# Now first the Z will raise 20mm, then x,y will home, nozzle to center and probe with bltouch
+gcode:
+        G91 ; relative positioning
+        G1 Z10 F600 ; z lifts 10mm
+        G90 ; absolute positioning
+        G28 X0 Y0 ; probe x and y. Not z
+        G1 X155 Y125 F3600 ; For bltouch move to center of your print bed
+        G28 Z0
+        G1 Z20
+axes: z
+set_position_z: 5
+
+[bed_mesh]
+speed: 50
+horizontal_move_z: 5
+samples: 3
+samples_result: average
+sample_retract_dist: 4.0
+min_point: 78,48
+max_point: 235,195
+probe_count: 5,5
 
 
 
@@ -210,7 +290,58 @@ recover_velocity: 40
 
 [printer]
 kinematics: cartesian
-max_velocity: 300
-max_accel: 3000
-max_z_velocity: 5
+max_velocity: 500
+max_accel: 6400
+max_z_velocity: 15
 max_z_accel: 100
+
+
+[gcode_macro G29]
+gcode:
+ G28
+ BED_MESH_CALIBRATE
+ BED_MESH_PROFILE SAVE=p1
+ G1 X0 Y0 Z20 F4000
+
+#*# <---------------------- SAVE_CONFIG ---------------------->
+#*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.
+#*#
+#*# [bed_mesh default]
+#*# points =
+#*# 	  0.446667, 0.263333, 0.129167, 0.052500, 0.120833
+#*# 	  0.423333, 0.130000, 0.049167, 0.041667, 0.144167
+#*# 	  0.339167, 0.209167, 0.069167, 0.004167, 0.097500
+#*# 	  0.367500, 0.154167, 0.029167, 0.016667, 0.110833
+#*# 	  0.480833, 0.199167, 0.044167, 0.008333, 0.070000
+#*# x_count = 5
+#*# y_count = 5
+#*# min_x = 78.0
+#*# max_x = 235.0
+#*# min_y = 48.0
+#*# max_y = 195.0
+#*# x_offset = -38.0
+#*# y_offset = -8.0
+#*# mesh_x_pps = 2
+#*# mesh_y_pps = 2
+#*# algo = lagrange
+#*# tension = 0.2
+#*#
+#*# [bed_mesh p1]
+#*# points =
+#*# 	  0.446667, 0.263333, 0.129167, 0.052500, 0.120833
+#*# 	  0.423333, 0.130000, 0.049167, 0.041667, 0.144167
+#*# 	  0.339167, 0.209167, 0.069167, 0.004167, 0.097500
+#*# 	  0.367500, 0.154167, 0.029167, 0.016667, 0.110833
+#*# 	  0.480833, 0.199167, 0.044167, 0.008333, 0.070000
+#*# x_count = 5
+#*# y_count = 5
+#*# min_x = 78.0
+#*# max_x = 235.0
+#*# min_y = 48.0
+#*# max_y = 195.0
+#*# x_offset = -38.0
+#*# y_offset = -8.0
+#*# mesh_x_pps = 2
+#*# mesh_y_pps = 2
+#*# algo = lagrange
+#*# tension = 0.2
