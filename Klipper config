@@ -19,7 +19,7 @@
 # - E steps
 # - Tune Pressure Advance
 
-
+# FysETC datasheet   : https://github.com/FYSETC/F6/blob/master/F6_V13.pdf
 # TMC2130 datasheet  : https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC2130_datasheet.pdf
 # Tuning TMC driver  : https://www.trinamic.com/fileadmin/assets/Support/Appnotes/AN001-spreadCycle.pdf
 # Gcode comparison   : https://github.com/KevinOConnor/klipper/blob/master/docs/G-Codes.md
@@ -62,104 +62,11 @@
 
 
 
-[stepper_x]
-step_pin: PF0
-dir_pin: PF1
-enable_pin: !PD7
-step_distance: .0125
-endstop_pin: ^PK1
-position_endstop: 0
-position_max: 235
-position_min: 0
-homing_speed: 40
-
-[tmc2130 stepper_x]
-cs_pin: PG4
-microsteps: 16
-interpolate: True
-run_current: .500
-hold_current: .200
-sense_resistor: 0.110
-stealthchop_threshold: 300
-driver_IHOLDDELAY: 8
-driver_TPOWERDOWN: 0
-driver_TOFF: 3
-driver_HEND: 1
-driver_HSTRT: 5
-driver_PWM_FREQ: 2
-driver_PWM_GRAD: 2
-driver_PWM_AMPL: 230
-driver_PWM_AUTOSCALE: True
-driver_SGT: 3
-
-[stepper_y]
-step_pin: PF6
-dir_pin: PF7
-enable_pin: !PF2
-step_distance: .0125
-endstop_pin: ^PJ1
-position_endstop: 0
-position_max: 235
-position_min: -4
-homing_speed: 35
-
-[tmc2130 stepper_y]
-cs_pin: PG2
-microsteps: 16
-interpolate: True
-run_current: .500
-hold_current: .200
-sense_resistor: 0.110
-stealthchop_threshold: 300
-driver_IHOLDDELAY: 8
-driver_TPOWERDOWN: 0
-driver_TOFF: 3
-driver_HEND: 1
-driver_HSTRT: 5
-driver_PWM_FREQ: 2
-driver_PWM_GRAD: 2
-driver_PWM_AMPL: 235
-driver_PWM_AUTOSCALE: True
-driver_SGT: 4
-
-[stepper_z]
-step_pin: PL6
-dir_pin: PL1
-enable_pin: !PF4
-step_distance: .0025
-endstop_pin: probe:z_virtual_endstop
-#position_endstop is the z-offset between the nozzle and bed after bltouch homing
-position_endstop: 0.45
-position_max: 180
-position_min: -1
-homing_speed: 3
-
-[tmc2130 stepper_z]
-cs_pin: PJ7
-microsteps: 16
-interpolate: True
-run_current: .400
-hold_current: .200
-sense_resistor: 0.110
-stealthchop_threshold: 0 ; disabled
-driver_IHOLDDELAY: 8
-driver_TPOWERDOWN: 0
-driver_TOFF: 3
-#Hysteresis
-driver_HEND: 1
-driver_HSTRT: 5
-driver_PWM_FREQ: 2
-driver_PWM_GRAD: 4
-driver_PWM_AMPL: 200
-driver_PWM_AUTOSCALE: True
-driver_SGT: 4
-
 [extruder]
 step_pin: PA4
 dir_pin: PA6
 enable_pin: !PA2
-#step_distance: .00241 ; Marlin conversion: 1 / 415 = 0.0024096386
-step_distance: 0.002100 ; custom from discord
+step_distance: .00241 ; Marlin conversion: 1 / 415 = 0.0024096386
 nozzle_diameter: 0.4
 filament_diameter: 1.750
 max_extrude_cross_section: 2.5
@@ -200,6 +107,102 @@ driver_PWM_GRAD: 5
 driver_PWM_AMPL: 240
 driver_PWM_AUTOSCALE: True
 driver_SGT: 3
+
+
+[stepper_x]
+step_pin: PF0
+dir_pin: PF1
+enable_pin: !PD7
+step_distance: .0125
+endstop_pin: ^PK1
+position_endstop: 0
+position_max: 235
+position_min: 0
+homing_speed: 40
+
+[tmc2130 stepper_x]
+cs_pin: PG4
+microsteps: 16
+interpolate: True
+run_current: .500
+hold_current: .200
+sense_resistor: 0.110
+stealthchop_threshold: 300
+driver_IHOLDDELAY: 8
+driver_TPOWERDOWN: 0
+driver_TOFF: 3
+driver_HEND: 1
+driver_HSTRT: 5
+driver_PWM_FREQ: 2
+driver_PWM_GRAD: 2
+driver_PWM_AMPL: 230
+driver_PWM_AUTOSCALE: True
+driver_SGT: 3
+
+
+[stepper_y]
+step_pin: PF6
+dir_pin: PF7
+enable_pin: !PF2
+step_distance: .0125
+endstop_pin: ^PJ1
+position_endstop: 0
+position_max: 235
+position_min: -4
+homing_speed: 35
+
+[tmc2130 stepper_y]
+cs_pin: PG2
+microsteps: 16
+interpolate: True
+run_current: .500
+hold_current: .200
+sense_resistor: 0.110
+stealthchop_threshold: 300
+driver_IHOLDDELAY: 8
+driver_TPOWERDOWN: 0
+driver_TOFF: 3
+driver_HEND: 1
+driver_HSTRT: 5
+driver_PWM_FREQ: 2
+driver_PWM_GRAD: 2
+driver_PWM_AMPL: 235
+driver_PWM_AUTOSCALE: True
+driver_SGT: 4
+
+
+[stepper_z]
+step_pin: PL6
+dir_pin: PL1
+enable_pin: !PF4
+step_distance: .0025
+endstop_pin: probe:z_virtual_endstop
+#position_endstop is the z-offset between the nozzle and bed after bltouch homing
+position_endstop: 0.45
+position_max: 180
+position_min: -1
+homing_speed: 3
+
+[tmc2130 stepper_z]
+cs_pin: PJ7
+microsteps: 16
+interpolate: True
+run_current: .400
+hold_current: .200
+sense_resistor: 0.110
+stealthchop_threshold: 0 ; disabled
+driver_IHOLDDELAY: 8
+driver_TPOWERDOWN: 0
+driver_TOFF: 3
+#Hysteresis
+driver_HEND: 1
+driver_HSTRT: 5
+driver_PWM_FREQ: 2
+driver_PWM_GRAD: 4
+driver_PWM_AMPL: 200
+driver_PWM_AUTOSCALE: True
+driver_SGT: 4
+
 
 [heater_bed]
 heater_pin: PH5
