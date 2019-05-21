@@ -83,8 +83,9 @@ pid_Ki: 1.091
 pid_Kd: 108.537
 min_temp: 0
 max_temp: 250
-pressure_advance: 0.05
-pressure_advance_lookahead_time: 0.010
+pressure_advance: 0.5
+pressure_advance_lookahead_time: 0.075
+
 
 
 
@@ -124,7 +125,7 @@ homing_speed: 40
 cs_pin: PG4
 microsteps: 16
 interpolate: True
-run_current: .500
+run_current: .600 ; .400 was ok for slow prints
 hold_current: .200
 sense_resistor: 0.110
 stealthchop_threshold: 300
@@ -155,7 +156,7 @@ homing_speed: 35
 cs_pin: PG2
 microsteps: 16
 interpolate: True
-run_current: .500
+run_current: .600 ; .400 was ok for slow prints
 hold_current: .200
 sense_resistor: 0.110
 stealthchop_threshold: 300
@@ -299,10 +300,10 @@ recover_velocity: 40
 [printer]
 kinematics: cartesian
 max_velocity: 500
-max_accel: 6400
+max_accel: 1500
 max_z_velocity: 15
-max_z_accel: 100
-
+max_z_accel: 30
+square_corner_velocity: 5.0
 
 [gcode_macro G29]
 gcode:
