@@ -257,26 +257,28 @@ gcode:
         G28 X0 Y0 ; probe x and y. Not z
         G1 X155 Y125 F3600 ; For bltouch move to center of your print bed
         G28 Z0
-        G1 Z20
 axes: z
 set_position_z: 5
 
 [bed_mesh]
-speed: 100
-horizontal_move_z: 4
-samples: 2 ; Make sure the BLTouch accuracy is perfect!
+speed: 150
+horizontal_move_z: 5
+samples: 3 ; 
 samples_result: average
-sample_retract_dist: 4.0 ; The distance to retract the tool between samples
-min_point: 80,49 ; The minimum start point (x,y) on the grid to generate
+sample_retract_dist: 5.0 ; The distance to retract the tool between samples
+min_point: 55,49 ; The minimum start point (x,y) on the grid to generate
 max_point: 235,195 ; The maximum start point (x,y) on the grid to generate
-probe_count: 7,7 ; the number of points to probe on each x,y axis
+probe_count: 5,5 ; the number of points to probe on each x,y axis
 fade_start: 1 ; z position to start fading out z_adjustment. Default 1.0
 fade_end: 10 ; the z position in which fading will complete. Default 10
 # Lagrange interpolation tends to oscillate as the number of samples increase,
 # so it is recommended to use bicubic interpolation for larger probe grids
 algorithm: bicubic ; 
 bicubic_tension: .2
-
+probe_ac_thresh: 0.05 ; max difference between measurements of a position
+probe_ac_retry: 5 ; Measurement retries of a position
+#probe_accuracy_threshold_action: warning, abort, retry 
+#probe_accuracy_threshold_retry_position: 2
 
 [virtual_sdcard]
 path: ~/gcode
@@ -317,11 +319,9 @@ square_corner_velocity: 5.0
 
 [gcode_macro G29]
 gcode:
- G28
+ BED_MESH_CLEAR
  BED_MESH_CALIBRATE
  BED_MESH_OUTPUT
- G1 X0 Y0 Z20 F4000
- SAVE_CONFIG
 
 #move your probe to desired position and issue a M48
 [gcode_macro M48]
@@ -375,3 +375,26 @@ gcode:
  G91
  G1 E-50 F1000
  G90
+
+#*# <---------------------- SAVE_CONFIG ---------------------->
+#*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.
+#*#
+#*# [bed_mesh default]
+#*# points =
+#*# 	0.157500, 0.132500, 0.063750, 0.165000, 0.547500
+#*# 	0.273750, 0.215000, 0.055000, 0.198750, 0.308750
+#*# 	0.261250, 0.230000, 0.070000, 0.170000, 0.278750
+#*# 	0.283750, 0.258750, 0.017500, 0.207500, 0.322500
+#*# 	0.143750, 0.000000, -0.087500, 0.100000, 0.246250
+#*# x_count = 5
+#*# y_count = 5
+#*# min_x = 55.0
+#*# max_x = 235.0
+#*# min_y = 49.0
+#*# max_y = 195.0
+#*# x_offset = -40.0
+#*# y_offset = -9.0
+#*# mesh_x_pps = 2
+#*# mesh_y_pps = 2
+#*# algo = bicubic
+#*# tension = 0.2
