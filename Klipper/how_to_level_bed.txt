@@ -1,0 +1,26 @@
+Bed level basics I've used for Klipper
+
+- set x and y bltouch/probe offset
+- Add [screws_tilt_adjust] configuration section
+- BED_MESH_CLEAR
+- SAVE_CONFIG
+- remove all bed leveling data from the config if any
+- restart klipper and verify bed leveling is gone.
+- PROBE_ACCURACY test your probe
+- PROBE_CALIBRATE calibrate Z offset
+- SCREWS_TILT_CALCULATE : level on screw positions
+- BED_MESH_CALIBRATE (no profile name, just default)
+- SAVE_CONFIG
+
+To verify:
+- Do a G28
+- Put a foled paper of 0.2mm on the bed
+- go to a probed position and enter G1 Z1
+- Carefully check you can go lower to G1 Z0.2
+- This should just touch the paper
+
+
+If you're using the graphical  octoprint bedlevelvisualizer, be aware: 
+- the graph doesn't show the whole bed, only the part you've leveled.
+- Check the X and Y are not inverted
+
